@@ -1,0 +1,11 @@
+{
+  "htyf": {
+    "type": "app",
+    "name": "demo-htyf",
+    "rotate": "portrait",
+    "projectname": "小程序",
+    "appid": "htyfapp7c9d512564977521f5ba986dcdd17d96",
+    "appUrlConfig": "https://xxxxx/app.json",
+    "zipUrl": "https://xxxxx/dist.[PLATFORM].dgz"
+  }
+}

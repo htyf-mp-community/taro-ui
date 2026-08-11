@@ -1,5 +1,5 @@
 {
-  "name": "taro-ui",
+  "name": "@htyf-mp/taro-ui",
   "version": "3.4.1",
   "description": "UI KIT for Taro",
   "main": "dist/index.js",

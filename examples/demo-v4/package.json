@@ -59,7 +59,7 @@
     "@tarojs/taro": "4.2.0",
     "classnames": "^2.2.6",
     "prop-types": "^15.7.2",
-    "taro-ui": "workspace:^"
+    "@htyf-mp/taro-ui": "workspace:^"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
