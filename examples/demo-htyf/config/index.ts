@@ -36,6 +36,8 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
     alias['react'] = react19
     alias['@tarojs/react'] = react19
     alias['expo-modules-core'] = resolveFromExpo('expo-modules-core')
+    // 仓库根 hoist 的是 demo-rn 的 13.8.0，原生 15.x 会派发 topSvgLayout，对不上就会崩
+    alias['react-native-svg'] = resolvePkgDir('react-native-svg')
   }
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: '_taro_temp_',

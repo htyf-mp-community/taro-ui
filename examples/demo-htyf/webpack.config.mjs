@@ -86,6 +86,7 @@ export default async (env = {}) => {
         ...(aliasOptions || {}),
         ...(_options.alias || {}),
         "react-native": path.join(__dirname, 'node_modules/react-native'),
+        "react-native-svg": path.join(__dirname, 'node_modules/react-native-svg'),
       },
     },
     output: {
