@@ -102,11 +102,15 @@ export default async (env = {}) => {
           type: 'javascript/auto',
         },
         // 处理静态资源（图片等），支持inline模式
-        ...Repack.getAssetTransformRules(!!mpOptions.extraChunksPath ?  {
+        // iconfont 转出的 SVG 会触发 svgo convertPathData 崩溃，关闭 svgo 仅做 SVGR 转 RN 组件
+        ...Repack.getAssetTransformRules({
           inline: !!mpOptions.extraChunksPath,
-          svg: 'svgr',
-        } : {
-          svg: "svgr",
+          svg: {
+            type: 'svgr',
+            options: {
+              svgo: false,
+            },
+          },
         }),
       ],
     },
