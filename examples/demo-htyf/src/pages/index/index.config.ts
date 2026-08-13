@@ -1,3 +1,3 @@
-export default {
-  navigationBarTitleText: 'Taro UI'
-}
+export default definePageConfig({
+  navigationBarTitleText: '首页'
+})

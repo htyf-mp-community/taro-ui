@@ -4,6 +4,20 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
 import devConfig from './dev'
 import prodConfig from './prod'
 
+const projectRoot = path.resolve(__dirname, '..')
+
+function resolvePkgDir(pkg: string, from = projectRoot) {
+  return path.dirname(require.resolve(`${pkg}/package.json`, { paths: [from] }))
+}
+
+/**
+ * 从 expo 的 pnpm 虚拟仓库解析配套包，避免 shamefully-hoist 把
+ * expo@48 的 expo-modules-core@1.2.7 提升到仓库根 node_modules 后被误解析。
+ */
+function resolveFromExpo(pkg: string) {
+  return resolvePkgDir(pkg, resolvePkgDir('expo'))
+}
+
 // https://taro-docs.jd.com/docs/next/config#defineconfig-辅助函数
 export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
   let alias: any = {
@@ -16,8 +30,12 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
   }
   // @ts-ignore
   if (process.env.TARO_ENV === 'rn' || process.env.TARO_ENV === 'htyf') {
-    // RN 和 HTFY 构建使用 React 19
-    delete alias['react']
+    const react19 = resolvePkgDir('react')
+    // RN / htyf 必须显式钉到 React 19。删掉 alias 后 webpack 会走到仓库根的 React 18，
+    // @tarojs/react 的 react-reconciler@0.29 再去读 ReactCurrentDispatcher 就会炸。
+    alias['react'] = react19
+    alias['@tarojs/react'] = react19
+    alias['expo-modules-core'] = resolveFromExpo('expo-modules-core')
   }
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: '_taro_temp_',
@@ -103,10 +121,12 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
     },
     htyf: {
       resolve: {
-        include: ['../taro-ui']
+        // transformer 会 path.join('node_modules', include)；不要写 '../taro-ui'，会被归一成 'taro-ui' 并误伤整个仓库
+        include: ['../packages/taro-ui']
       },
       alias: {
         ...alias,
+        'expo-modules-core': resolveFromExpo('expo-modules-core'),
       },
       appName: 'apps',
       entry: 'app',
