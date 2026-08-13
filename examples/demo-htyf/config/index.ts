@@ -68,7 +68,8 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
     },
     alias: {
       ...alias,
-      '@htyf-mp/taro-ui': `../packages/taro-ui/rn`
+       '~taro-ui/dist': path.resolve(__dirname, '../../../packages/taro-ui/rn'),
+      '@htyf-mp/taro-ui': path.resolve(__dirname, '../../../packages/taro-ui/rn')
     },
     mini: {
       postcss: {
